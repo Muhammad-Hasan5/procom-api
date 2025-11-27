@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { Controller } from "../types/Controller.js";
+import { RequestHandlerType } from "../types/RequestHandler.js";
 
-export const asyncHandler = (requestHandler: Controller) => {
+export const asyncHandler = (requestHandler: RequestHandlerType) => {
 	return (req: Request, res: Response, next: NextFunction) => {
 		Promise.resolve(
-			requestHandler(req, res, next).catch((error: unknown) => next(error)),
+			requestHandler(req, res, next).catch((error: unknown) =>
+				next(error),
+			),
 		);
 	};
 };
