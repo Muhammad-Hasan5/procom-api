@@ -1,0 +1,113 @@
+import mongoose, { Date, mongo, Schema } from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import crypto from "node:crypto";
+
+const userSchema = new Schema(
+	{
+		avatar: {
+			type: {
+				url: String,
+				localPath: String,
+			},
+			default: {
+				url: `https://placehold.co/200x200`,
+				localPath: "",
+			},
+		},
+		username: {
+			type: String,
+			trim: true,
+			unique: true,
+			required: true,
+			lowercase: true,
+			index: true,
+		},
+		fullname: {
+			type: String,
+			trim: true,
+			required: true,
+			lowercase: true,
+		},
+		email: {
+			type: String,
+			trim: true,
+			required: true,
+			lowercase: true,
+			unique: true,
+		},
+		password: {
+			type: String,
+			required: [true, "Password is required to be registered as a user"],
+		},
+		isEmailVerified: {
+			type: Boolean,
+			required: true,
+		},
+		refreshToken: {
+			type: String,
+			required: true,
+		},
+		forgetPasswordToken: {
+			type: String,
+		},
+		forgetPasswordTokenExpiry: {
+			type: String,
+		},
+		emailVerificationToken: {
+			type: String,
+		},
+		emailVerificationTokenExpiry: {
+			type: String,
+		},
+	},
+	{
+		timestamps: true,
+	},
+);
+
+userSchema.pre("save", async function (next) {
+	if (!this.isModified("password")) return;
+	this.password = await bcrypt.hash(this.password, 10);
+});
+
+userSchema.methods.isPasswordCorrect = async function (password: string) {
+	return await bcrypt.compare(password, this.password);
+};
+
+userSchema.methods.generateAccessToken = function () {
+	return jwt.sign(
+		{
+			_id: this._id.toString(),
+			username: this.username,
+			email: this.email,
+		},
+		process.env.ACCESS_TOKEN_SECRET as string,
+		{
+			expiresIn: "1hr",
+			algorithm: "HS256",
+		},
+	);
+};
+
+userSchema.methods.generateRefreshToken = function () {
+	return jwt.sign(
+		{
+			_id: this._id.toString(),
+		},
+		process.env.REFRESH_TOKEN_SECRET as string,
+		{
+			expiresIn: "1d",
+			algorithm: "HS256",
+		},
+	);
+};
+
+userSchema.methods.generateTemporaryToken = function () {
+	const unHashedToken: string = crypto.randomBytes(20).toString("hex");
+	const hashedToken: string = crypto.hash("sha256", unHashedToken, "hex");
+	const expiryTime = Date.now() + 5 * 60 * 1000;
+	return { unHashedToken, hashedToken, expiryTime };
+};
+
+export const User = mongoose.model("User", userSchema)
