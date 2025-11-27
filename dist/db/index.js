@@ -4,7 +4,7 @@ export const connectDB = async () => {
     if (!mongoUri) {
         throw new Error("❌ MONGO_URI is missing in environment variables");
     }
-    // Register connection event listeners 
+    // Register connection event listeners (once)
     mongoose.connection.on("connected", () => console.log("✅ Database connected"));
     mongoose.connection.on("disconnected", () => console.log("❌ Disconnected"));
     mongoose.connection.on("reconnected", () => console.log("🔄 Reconnected"));
