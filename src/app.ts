@@ -23,6 +23,11 @@ app.use(
 	}),
 );
 
+// Routes:
+import healthcheck_Router from "./routes/healthcheck.route.js";
+
+app.use("/api/v1/healthcheck", healthcheck_Router)
+
 app.get("/", (req: Request, res: Response) => {
 	res.send("welcome to Notion-Lite");
 });
