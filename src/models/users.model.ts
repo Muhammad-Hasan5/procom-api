@@ -1,9 +1,10 @@
-import mongoose, { Date, mongo, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
+import { IUser, IUserMethods, UserModel } from "../types/UserModel.js";
 
-const userSchema = new Schema(
+const userSchema = new Schema<IUser, IUserMethods, UserModel>(
 	{
 		avatar: {
 			type: {
@@ -52,13 +53,13 @@ const userSchema = new Schema(
 			type: String,
 		},
 		forgetPasswordTokenExpiry: {
-			type: String,
+			type: Number,
 		},
 		emailVerificationToken: {
 			type: String,
 		},
 		emailVerificationTokenExpiry: {
-			type: String,
+			type: Number,
 		},
 	},
 	{
@@ -66,7 +67,7 @@ const userSchema = new Schema(
 	},
 );
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
 	if (!this.isModified("password")) return;
 	this.password = await bcrypt.hash(this.password, 10);
 });
@@ -110,4 +111,4 @@ userSchema.methods.generateTemporaryToken = function () {
 	return { unHashedToken, hashedToken, expiryTime };
 };
 
-export const User = mongoose.model("User", userSchema)
+export const User = mongoose.model<IUser, UserModel>("User", userSchema)

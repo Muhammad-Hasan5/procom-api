@@ -50,18 +50,18 @@ const userSchema = new Schema({
         type: String,
     },
     forgetPasswordTokenExpiry: {
-        type: String,
+        type: Number,
     },
     emailVerificationToken: {
         type: String,
     },
     emailVerificationTokenExpiry: {
-        type: String,
+        type: Number,
     },
 }, {
     timestamps: true,
 });
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
     if (!this.isModified("password"))
         return;
     this.password = await bcrypt.hash(this.password, 10);
