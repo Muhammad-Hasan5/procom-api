@@ -15,6 +15,9 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
+// Routes:
+import healthcheck_Router from "./routes/healthcheck.route.js";
+app.use("/api/v1/healthcheck", healthcheck_Router);
 app.get("/", (req, res) => {
     res.send("welcome to Notion-Lite");
 });
