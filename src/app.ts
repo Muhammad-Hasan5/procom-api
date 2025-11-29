@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
+import cookieParser from "cookie-parser"
 import cors from "cors";
+
 
 const app = express();
 
@@ -22,6 +24,9 @@ app.use(
 		allowedHeaders: ["Content-Type", "Authorization"],
 	}),
 );
+
+//using cookie-parser
+app.use(cookieParser())
 
 // Routes:
 import healthcheck_Router from "./routes/healthcheck.route.js";
