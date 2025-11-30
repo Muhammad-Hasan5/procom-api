@@ -89,7 +89,7 @@ userSchema.methods.generateRefreshToken = function () {
 };
 userSchema.methods.generateTemporaryToken = function () {
     const unHashedToken = crypto.randomBytes(20).toString("hex");
-    const hashedToken = crypto.hash("sha256", unHashedToken, "hex");
+    const hashedToken = crypto.createHash("sha256").update(unHashedToken).digest("hex");
     const expiryTime = Date.now() + 5 * 60 * 1000;
     return { unHashedToken, hashedToken, expiryTime };
 };

@@ -106,7 +106,7 @@ userSchema.methods.generateRefreshToken = function () {
 
 userSchema.methods.generateTemporaryToken = function () {
 	const unHashedToken: string = crypto.randomBytes(20).toString("hex");
-	const hashedToken: string = crypto.hash("sha256", unHashedToken, "hex");
+	const hashedToken: string = crypto.createHash("sha256").update(unHashedToken).digest("hex");
 	const expiryTime = Date.now() + 5 * 60 * 1000;
 	return { unHashedToken, hashedToken, expiryTime };
 };
