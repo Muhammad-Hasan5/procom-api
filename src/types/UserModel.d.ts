@@ -1,4 +1,4 @@
-import { Model, Document } from "mongoose";
+import { Model, Document, Types } from "mongoose";
 
 export interface IUser {
 	avatar?: {
@@ -28,8 +28,19 @@ export interface IUserMethods {
 	};
 }
 
-export type UserDocument = Document & IUser & IUserMethods
+
 
 export interface UserModel extends Model<IUser, {}, IUserMethods> {}
+
+
+export type UserDocument = Document<Types.ObjectId> & IUser & IUserMethods;
+
+declare global {
+	namespace Express {
+		interface Request {
+			user?: UserDocument
+		}
+	}
+}
 
 
