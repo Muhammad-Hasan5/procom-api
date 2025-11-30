@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
-import cookieParser from "cookie-parser"
+import cookieParser from "cookie-parser";
 import cors from "cors";
-
 
 const app = express();
 
@@ -26,12 +25,14 @@ app.use(
 );
 
 //using cookie-parser
-app.use(cookieParser())
+app.use(cookieParser());
 
 // Routes:
 import healthcheck_Router from "./routes/healthcheck.route.js";
+import auth_Router from "./routes/auth.route.js";
 
-app.use("/api/v1/healthcheck", healthcheck_Router)
+app.use("/api/v1/healthcheck", healthcheck_Router);
+app.use("/api/v1/auth", auth_Router);
 
 app.get("/", (req: Request, res: Response) => {
 	res.send("welcome to Notion-Lite");
