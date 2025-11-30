@@ -76,7 +76,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
 export const login = asyncHandler(async (req: Request, res: Response) => {
 	const { email, password } = await req.body;
 
-	const user = await User.findOne(email);
+	const user = await User.findOne({email});
 	if (!user) {
 		throw new ApiErrorResponse(404, "User with this email not found");
 	}
@@ -205,7 +205,7 @@ export const resendEmailVerificationMail = asyncHandler(
 		await sendEmail({
 			to: user?.email,
 			subject: "Verify your email",
-			html: `<p>Welcome! Please verify your email to activate your account by clicking <a href="${req.protocol}://${req.get("host")}/api/v1/users/verify-email/${unHashedToken}">here</a>.</p>`,
+			html: `<p>Welcome! Please verify your email to activate your account by clicking <a href="${req.protocol}://${req.get("host")}/api/v1/auth/verify-email/${unHashedToken}">here</a>.</p>`,
 		});
 
 		return res
@@ -275,7 +275,7 @@ export const forgotPasswordRequest = asyncHandler(
 	async (req: Request, res: Response) => {
 		const { email } = req.body;
 
-		const user = await User.findOne(email);
+		const user = await User.findOne({email});
 
 		if (!user) {
 			throw new ApiErrorResponse(
