@@ -22,7 +22,7 @@ export const userRegistervalidator = () => {
 			.withMessage("password is required")
 			.isLength({ min: 8 })
 			.withMessage("password must be 8 characters long"),
-		body("fullname").trim().optional(),
+		body("fullname").trim(),
 	];
 };
 

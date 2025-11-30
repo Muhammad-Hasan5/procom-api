@@ -47,7 +47,7 @@ const userSchema = new Schema<IUser, IUserMethods, UserModel>(
 		},
 		refreshToken: {
 			type: String,
-			required: true,
+			default: null,
 		},
 		forgetPasswordToken: {
 			type: String,

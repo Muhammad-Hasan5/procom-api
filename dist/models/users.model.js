@@ -44,7 +44,7 @@ const userSchema = new Schema({
     },
     refreshToken: {
         type: String,
-        required: true,
+        default: null,
     },
     forgetPasswordToken: {
         type: String,
