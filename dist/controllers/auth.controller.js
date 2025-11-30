@@ -240,3 +240,12 @@ export const changeCurrentPassword = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiSuccessResponse(true, 200, "password changed successfully"));
 });
+export const deleteUser = asyncHandler(async (req, res) => {
+    const deletedUser = await User.findByIdAndDelete(req.user?._id);
+    if (!deletedUser) {
+        throw new ApiErrorResponse(404, "user not found");
+    }
+    return res
+        .status(200)
+        .json(new ApiSuccessResponse(true, 200, "User deleted successfully", deletedUser));
+});

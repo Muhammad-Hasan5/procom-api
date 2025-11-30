@@ -393,3 +393,20 @@ export const changeCurrentPassword = asyncHandler(
 			);
 	},
 );
+
+export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
+	const deletedUser = await User.findByIdAndDelete(req.user?._id);
+	if (!deletedUser) {
+		throw new ApiErrorResponse(404, "user not found");
+	}
+	return res
+		.status(200)
+		.json(
+			new ApiSuccessResponse(
+				true,
+				200,
+				"User deleted successfully",
+				deletedUser,
+			),
+		);
+});
