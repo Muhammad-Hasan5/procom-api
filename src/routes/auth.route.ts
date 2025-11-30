@@ -10,6 +10,7 @@ import {
 	forgotPasswordRequest,
 	changeCurrentPassword,
 	resetForgotPassword,
+	deleteUser
 } from "../controllers/auth.controller.js";
 import {
 	userRegistervalidator,
@@ -48,5 +49,6 @@ router
 		changeCurrentPassword,
 	);
 router.route("/get-current-user").get(authMiddleware, getCurrentUser);
+router.route("/delete-user").delete(authMiddleware, deleteUser)
 
 export default router;

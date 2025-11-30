@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login, logout, getCurrentUser, verifyEmail, resendEmailVerificationMail, renewAccessToken, forgotPasswordRequest, changeCurrentPassword, resetForgotPassword, } from "../controllers/auth.controller.js";
+import { register, login, logout, getCurrentUser, verifyEmail, resendEmailVerificationMail, renewAccessToken, forgotPasswordRequest, changeCurrentPassword, resetForgotPassword, deleteUser } from "../controllers/auth.controller.js";
 import { userRegistervalidator, userLoginValidator, changePasswordValidator, forgotPasswordValidator, resetPasswordValidator, } from "../validators/index.validators.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { validate } from "../middlewares/validators.middleware.js";
@@ -24,4 +24,5 @@ router
     .route("/change-password")
     .patch(authMiddleware, changePasswordValidator(), validate, changeCurrentPassword);
 router.route("/get-current-user").get(authMiddleware, getCurrentUser);
+router.route("/delete-user").delete(authMiddleware, deleteUser);
 export default router;
