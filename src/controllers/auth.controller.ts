@@ -4,13 +4,9 @@ import { asyncHandler } from "../utils/async-handler.js";
 import { User } from "../models/users.model.js";
 import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
-import {
-	sendEmail,
-	emailVerificationMailgenContent,
-	passwordForgotMailgenContent,
-} from "../utils/mail.js";
 import { Request, Response } from "express";
 import { RefreshTokenPayload } from "../types/TokensPayload.js";
+import { sendEmail } from "../utils/mail.js";
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
 	const { fullname, username, email, password } = await req.body;
@@ -50,13 +46,11 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
 
 	await user.save({ validateBeforeSave: false });
 
+	//send email:
 	await sendEmail({
-		email: user?.email,
-		subject: "Please verify your email",
-		mailgenContent: emailVerificationMailgenContent(
-			user?.username,
-			`${req.protocol}://${req.get("host")}/api/v1/users/verify-email/${unHashedToken}`,
-		),
+		to: user?.email,
+		subject: "Verify your email",
+		html: `<p>Welcome! Please verify your email to activate your account by clicking <a href="${req.protocol}://${req.get("host")}/api/v1/users/verify-email/${unHashedToken}">here</a>.</p>`,
 	});
 
 	const createdUser = await User.findById(user?._id).select(
@@ -207,14 +201,16 @@ export const resendEmailVerificationMail = asyncHandler(
 		user.emailVerificationTokenExpiry = expiryTime;
 		await user.save({ validateBeforeSave: false });
 
+		//send email
 		await sendEmail({
-			email: user?.email,
-			subject: "Please verify your email",
-			mailgenContent: emailVerificationMailgenContent(
-				user?.username,
-				`${req.protocol}://${req.get("host")}/api/v1/users/verify-email/${unHashedToken}`,
-			),
+			to: user?.email,
+			subject: "Verify your email",
+			html: `<p>Welcome! Please verify your email to activate your account by clicking <a href="${req.protocol}://${req.get("host")}/api/v1/users/verify-email/${unHashedToken}">here</a>.</p>`,
 		});
+
+		return res
+			.status(200)
+			.json(new ApiSuccessResponse(true, 200, "email send successfully"));
 	},
 );
 
@@ -295,13 +291,11 @@ export const forgotPasswordRequest = asyncHandler(
 		user.forgetPasswordTokenExpiry = expiryTime;
 		await user.save({ validateBeforeSave: false });
 
+		//send email
 		await sendEmail({
-			email: user?.email,
-			subject: "Reset your password",
-			mailgenContent: passwordForgotMailgenContent(
-				user?.username,
-				`${req.protocol}://${req.get("host")}/api/v1/users/forgot-password/${unHashedToken}`,
-			),
+			to: user?.email,
+			subject: "Reset your forgot password",
+			html: `<p>You requested a password reset. Click <a href="${req.protocol}://${req.get("host")}/api/v1/users/forgot-password/${unHashedToken}">here</a> to set a new password. This link expires in 5 minutes.</p>`,
 		});
 
 		return res
@@ -343,6 +337,13 @@ export const resetForgotPassword = asyncHandler(
 		user.password = newPassword;
 		await user.save({ validateBeforeSave: false });
 
+		//send email
+		await sendEmail({
+			to: user?.email,
+			subject: "Verify your email",
+			html: `<p>Your password has been successfully reset. You can now <a href="${req.protocol}://${req.get("host")}/api/v1/users/login-user">log in</a> with your new password.</p>`,
+		});
+
 		return res
 			.status(200)
 			.json(
@@ -373,6 +374,13 @@ export const changeCurrentPassword = asyncHandler(
 
 		user.password = newPassword;
 		await user.save({ validateBeforeSave: false });
+
+		//send email
+		await sendEmail({
+			to: user?.email,
+			subject: "Verify your email",
+			html: `<p>Your password has been successfully changed. If you didn't do this, please contact support immediately.</p>`,
+		});
 
 		return res
 			.status(200)
