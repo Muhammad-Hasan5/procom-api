@@ -14,7 +14,7 @@ export const authMiddleware = asyncHandler(
 		if (!accessToken) {
 			throw new ApiErrorResponse(
 				404,
-				"Access token not found, logged in user not validated",
+				"Access token not found, user not authenticated",
 			);
 		}
 

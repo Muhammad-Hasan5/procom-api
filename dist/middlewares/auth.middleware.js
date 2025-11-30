@@ -6,7 +6,7 @@ export const authMiddleware = asyncHandler(async (req, res, next) => {
     const accessToken = req.cookies?.accessToken ||
         req.header("Authorization")?.replace("Bearer ", "");
     if (!accessToken) {
-        throw new ApiErrorResponse(404, "Access token not found, logged in user not validated");
+        throw new ApiErrorResponse(404, "Access token not found, user not authenticated");
     }
     try {
         const decodedAccessToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
