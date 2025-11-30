@@ -8,7 +8,7 @@ export class ApiSuccessResponse {
 		success: boolean,
 		statusCode: number,
 		message: string,
-		data: any,
+		data?: any,
 	) {
 		this.success = success;
 		this.statusCode = statusCode;
