@@ -4,7 +4,7 @@ const notesSchema = new Schema({
         type: String,
         required: true,
     },
-    description: {
+    content: {
         type: String,
         default: "",
     },
@@ -24,4 +24,8 @@ const notesSchema = new Schema({
 }, {
     timestamps: true,
 });
-export const Notes = mongoose.model("Notes", notesSchema);
+notesSchema.index({
+    title: "text",
+    content: "text",
+});
+export const Note = mongoose.model("Notes", notesSchema);

@@ -1,13 +1,13 @@
 import mongoose, {Schema} from "mongoose";
-import { INotes, INotesModel } from "../types/NotesModel.js";
+import { INoteDocument, INoteModel } from "../types/NotesModel.js";
 
-const notesSchema = new Schema<INotes, INotesModel>(
+const notesSchema = new Schema<INoteDocument>(
 	{
 		title: {
 			type: String,
             required: true,
 		},
-		description: {
+		content: {
 			type: String,
             default: "",
 		},
@@ -30,4 +30,9 @@ const notesSchema = new Schema<INotes, INotesModel>(
 	},
 );
 
-export const Notes = mongoose.model<INotes, INotesModel>("Notes", notesSchema)
+notesSchema.index({
+	title: "text",
+	content: "text",
+})
+
+export const Note = mongoose.model<INoteDocument, INoteModel>("Notes", notesSchema)
