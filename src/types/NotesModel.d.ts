@@ -1,13 +1,17 @@
-import mongoose, { Types } from "mongoose";
-import { IUser } from "./UserModel.js";
+import mongoose, { Model, Types, Document } from "mongoose";
 
-export interface INotes {
+export interface INote {
 	title: string;
-	description: string;
-	isArchived: boolean;
-	isPinned: boolean;
-	user: mongoose.Schema.Types.ObjectId | IUser;
+	content: string;
+	isArchived?: boolean;
+	isPinned?: boolean;
+	user: Types.ObjectId
 }
 
-export interface INotesModel extends Model<INotes, {}, {}> {}
+export interface INoteDocument extends INote, Document {
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export interface INoteModel extends Model<INotesDocument> {}
 
