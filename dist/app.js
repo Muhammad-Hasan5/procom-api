@@ -21,8 +21,10 @@ app.use(cookieParser());
 // Routes:
 import healthcheck_Router from "./routes/healthcheck.route.js";
 import auth_Router from "./routes/auth.route.js";
+import notes_Router from "./routes/notes.route.js";
 app.use("/api/v1/healthcheck", healthcheck_Router);
 app.use("/api/v1/auth", auth_Router);
+app.use("/api/v1", notes_Router);
 app.get("/", (req, res) => {
     res.send("welcome to Notion-Lite");
 });
