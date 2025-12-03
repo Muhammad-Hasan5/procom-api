@@ -25,9 +25,11 @@ export const createNote = asyncHandler(async (req: Request, res: Response) => {
 
 export const getNote = asyncHandler(async (req: Request, res: Response) => {
 	const { noteId } = req.params;
-    const user_id = req.user?._id
+	const user_id = req.user?._id;
 
-	const note = await Note.findOne({_id: noteId, user: user_id}).populate("user");
+	const note = await Note.findOne({ _id: noteId, user: user_id }).populate(
+		"user",
+	);
 
 	if (!note) {
 		throw new ApiErrorResponse(404, "Note not found");
@@ -67,13 +69,13 @@ export const getNotes = asyncHandler(async (req: Request, res: Response) => {
 export const updateNote = asyncHandler(async (req: Request, res: Response) => {
 	const { title, content } = req.body;
 	const { noteId } = req.params;
-    const user_id = req.user?._id
+	const user_id = req.user?._id;
 
 	const updatedNote = await Note.findOneAndUpdate(
-        {_id: noteId, user: user_id},
-        {title, content},
-        {new: true}
-    );
+		{ _id: noteId, user: user_id },
+		{ title, content },
+		{ new: true },
+	);
 
 	if (!updatedNote) {
 		throw new ApiErrorResponse(404, "Unable to update the note");
@@ -93,9 +95,12 @@ export const updateNote = asyncHandler(async (req: Request, res: Response) => {
 
 export const deleteNote = asyncHandler(async (req: Request, res: Response) => {
 	const { noteId } = req.params;
-    const user_id = req.user?._id
+	const user_id = req.user?._id;
 
-	const deletedNote = await Note.findOneAndDelete({_id: noteId, user: user_id});
+	const deletedNote = await Note.findOneAndDelete({
+		_id: noteId,
+		user: user_id,
+	});
 
 	if (!deletedNote) {
 		throw new ApiErrorResponse(404, "Unable to delete the note");
@@ -115,16 +120,18 @@ export const deleteNote = asyncHandler(async (req: Request, res: Response) => {
 
 export const archiveNote = asyncHandler(async (req: Request, res: Response) => {
 	const { noteId } = req.params;
-	const isArchive = req.body;
-    const user_id = req.user?._id
+	const { isArchived } = req.body;
+	const user_id = req.user?._id;
 
-	const note = await Note.findOne({_id: noteId, user: user_id}).populate("user");
+	const note = await Note.findOne({ _id: noteId, user: user_id }).populate(
+		"user",
+	);
 
 	if (!note) {
 		throw new ApiErrorResponse(404, "Invalid not id");
 	}
 
-	note.isArchived = isArchive;
+	note.isArchived = isArchived;
 	await note.save();
 
 	return res
@@ -141,7 +148,7 @@ export const archiveNote = asyncHandler(async (req: Request, res: Response) => {
 
 export const pinNote = asyncHandler(async (req: Request, res: Response) => {
 	const { noteId } = req.params;
-	const isPin = req.body;
+	const { isPinned } = req.body;
 	const user_id = req.user?._id;
 
 	const note = await Note.findOne({ _id: noteId, user: user_id }).populate(
@@ -152,7 +159,7 @@ export const pinNote = asyncHandler(async (req: Request, res: Response) => {
 		throw new ApiErrorResponse(404, "Invalid not id");
 	}
 
-	note.isPinned = isPin;
+	note.isPinned = isPinned;
 	await note.save();
 
 	return res
