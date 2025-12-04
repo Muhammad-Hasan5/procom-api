@@ -1,11 +1,12 @@
-import mongoose, { Model, Types, Document } from "mongoose";
+import { Model, Types, Document } from "mongoose";
 
 export interface INote {
 	title: string;
 	content: string;
 	isArchived?: boolean;
 	isPinned?: boolean;
-	user: Types.ObjectId
+	user: Types.ObjectId;
+	project: Types.ObjectId;
 }
 
 export interface INoteDocument extends INote, Document {

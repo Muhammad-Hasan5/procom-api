@@ -1,15 +1,15 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 import { INoteDocument, INoteModel } from "../types/NotesModel.types.js";
 
 const notesSchema = new Schema<INoteDocument>(
 	{
 		title: {
 			type: String,
-            required: true,
+			required: true,
 		},
 		content: {
 			type: String,
-            default: "",
+			default: "",
 		},
 		isArchived: {
 			type: Boolean,
@@ -20,9 +20,14 @@ const notesSchema = new Schema<INoteDocument>(
 			default: false,
 		},
 		user: {
-			type: mongoose.Schema.Types.ObjectId,
+			type: Types.ObjectId,
 			ref: "User",
 			required: true,
+		},
+		project: {
+			type: Types.ObjectId,
+			ref: "Project",
+			required: true
 		},
 	},
 	{
@@ -33,6 +38,9 @@ const notesSchema = new Schema<INoteDocument>(
 notesSchema.index({
 	title: "text",
 	content: "text",
-})
+});
 
-export const Note = mongoose.model<INoteDocument, INoteModel>("Notes", notesSchema)
+export const Note = mongoose.model<INoteDocument, INoteModel>(
+	"Note",
+	notesSchema,
+);

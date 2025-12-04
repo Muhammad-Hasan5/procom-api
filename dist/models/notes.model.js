@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 const notesSchema = new Schema({
     title: {
         type: String,
@@ -17,9 +17,14 @@ const notesSchema = new Schema({
         default: false,
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Types.ObjectId,
         ref: "User",
         required: true,
+    },
+    project: {
+        type: Types.ObjectId,
+        ref: "Project",
+        required: true
     },
 }, {
     timestamps: true,
@@ -28,4 +33,4 @@ notesSchema.index({
     title: "text",
     content: "text",
 });
-export const Note = mongoose.model("Notes", notesSchema);
+export const Note = mongoose.model("Note", notesSchema);
