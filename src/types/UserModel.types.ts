@@ -35,12 +35,6 @@ export interface UserModel extends Model<IUser, {}, IUserMethods> {}
 
 export type UserDocument = Document<Types.ObjectId> & IUser & IUserMethods;
 
-declare global {
-	namespace Express {
-		interface Request {
-			user?: UserDocument
-		}
-	}
-}
+
 
 

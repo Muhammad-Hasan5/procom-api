@@ -3,7 +3,7 @@ import { ApiErrorResponse } from "../utils/api-error-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { User } from "../models/users.model.js";
 import jwt from "jsonwebtoken";
-import { AccessTokenPayload } from "../types/TokensPayload.js";
+import { AccessTokenPayload } from "../types/TokensPayload.types.js";
 
 export const authMiddleware = asyncHandler(
 	async (req: Request, res: Response, next: NextFunction) => {

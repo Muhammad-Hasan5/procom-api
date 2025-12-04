@@ -5,7 +5,7 @@ import { User } from "../models/users.model.js";
 import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
-import { RefreshTokenPayload } from "../types/TokensPayload.js";
+import { RefreshTokenPayload } from "../types/TokensPayload.types.js";
 import { sendEmail } from "../utils/mail.js";
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
@@ -76,7 +76,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
 export const login = asyncHandler(async (req: Request, res: Response) => {
 	const { email, password } = await req.body;
 
-	const user = await User.findOne({email});
+	const user = await User.findOne({ email });
 	if (!user) {
 		throw new ApiErrorResponse(404, "User with this email not found");
 	}
@@ -275,7 +275,7 @@ export const forgotPasswordRequest = asyncHandler(
 	async (req: Request, res: Response) => {
 		const { email } = req.body;
 
-		const user = await User.findOne({email});
+		const user = await User.findOne({ email });
 
 		if (!user) {
 			throw new ApiErrorResponse(

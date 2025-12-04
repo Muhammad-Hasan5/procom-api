@@ -1,5 +1,5 @@
 import mongoose, {Schema} from "mongoose";
-import { INoteDocument, INoteModel } from "../types/NotesModel.js";
+import { INoteDocument, INoteModel } from "../types/NotesModel.types.js";
 
 const notesSchema = new Schema<INoteDocument>(
 	{

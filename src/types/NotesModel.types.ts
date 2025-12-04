@@ -13,5 +13,5 @@ export interface INoteDocument extends INote, Document {
 	updatedAt: Date;
 }
 
-export interface INoteModel extends Model<INotesDocument> {}
+export interface INoteModel extends Model<INoteDocument> {}
 
