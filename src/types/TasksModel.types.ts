@@ -15,3 +15,5 @@ export interface ITaskDocument extends ITask, Document {
 }
 
 export interface ITaskModel extends Model<ITaskDocument> {}
+
+export type TaskDocument = Document<Types.ObjectId> & ITask;
