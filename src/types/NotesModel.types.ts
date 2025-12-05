@@ -16,3 +16,5 @@ export interface INoteDocument extends INote, Document {
 
 export interface INoteModel extends Model<INoteDocument> {}
 
+export type NoteDocument = Document<Types.ObjectId> & INote 
+
