@@ -7,25 +7,50 @@ import {
 	deleteNote,
 	archiveNote,
 	pinNote,
-	searchNote,
+	
 } from "../controllers/notes.controller.js";
 import { validate } from "../middlewares/validators.middleware.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { notesValidator } from "../validators/notes.validator.js";
+import { canAccessProject } from "../middlewares/project.middleware.js";
+import { canAccessNote } from "../middlewares/note.middleware.js";
 
-const router = Router();
+const router = Router({ mergeParams: true });
+
+//create note and get all notes
+router
+	.route("/project/:projectId/notes")
+	.post(
+		authMiddleware,
+		canAccessProject,
+		notesValidator(),
+		validate,
+		createNote,
+	)
+	.get(authMiddleware, canAccessProject, getNotes); // search or get all notes
+
+// get single note, update note, delete note
+router
+	.route("/project/:projectId/notes/:noteId")
+	.get(authMiddleware, canAccessProject, canAccessNote, getNote)
+	.patch(
+		authMiddleware,
+		canAccessProject,
+		canAccessNote,
+		notesValidator(),
+		validate,
+		updateNote,
+	)
+	.delete(authMiddleware, canAccessProject, canAccessNote, deleteNote);
+
+// actions on note
+router
+	.route("/project/:projectId/notes/:noteId/archive")
+	.patch(authMiddleware, canAccessProject, canAccessNote, archiveNote);
 
 router
-	.route("/notes")
-	.post(authMiddleware, notesValidator(), validate, createNote);
-router.route("/notes/:noteId").get(authMiddleware, getNote);
-router.route("/notes").get(authMiddleware, getNotes);
-router
-	.route("/notes/:noteId")
-	.patch(authMiddleware, notesValidator(), validate, updateNote);
-router.route("/notes/:noteId").delete(authMiddleware, deleteNote);
-router.route("/notes/:noteId/archive").patch(authMiddleware, archiveNote);
-router.route("/notes/:noteId/pin").patch(authMiddleware, pinNote);
-router.route("/notes/:noteId/q=search").get(authMiddleware, searchNote);
+	.route("/project/:projectId/notes/:noteId/pin")
+	.patch(authMiddleware, canAccessProject, canAccessNote, pinNote);
+
 
 export default router;
