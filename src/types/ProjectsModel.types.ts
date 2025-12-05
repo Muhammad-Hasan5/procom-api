@@ -13,3 +13,5 @@ export interface IProjectDocument extends IProject, Document {
 }
 
 export interface IProjectModel extends Model<IProjectDocument> {}
+
+export type ProjectDocument = Document<Types.ObjectId> & IProject
