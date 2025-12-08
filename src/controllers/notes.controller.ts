@@ -3,6 +3,7 @@ import { ApiSuccessResponse } from "../utils/api-success-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { Note } from "../models/notes.model.js";
 import { Request, Response } from "express";
+import { INoteDocument, NoteDocument } from "../types/NotesModel.types.js";
 
 export const createNote = asyncHandler(async (req: Request, res: Response) => {
 	const { title, content } = req.body;
@@ -20,7 +21,7 @@ export const createNote = asyncHandler(async (req: Request, res: Response) => {
 
 	return res
 		.status(200)
-		.json(new ApiSuccessResponse(true, 200, "Note created", note));
+		.json(new ApiSuccessResponse<NoteDocument>(true, 200, "Note created", note));
 });
 
 export const getNote = asyncHandler(async (req: Request, res: Response) => {
@@ -29,7 +30,7 @@ export const getNote = asyncHandler(async (req: Request, res: Response) => {
 	return res
 		.status(200)
 		.json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<NoteDocument>(
 				true,
 				200,
 				"Note retrieved successfully",
@@ -65,7 +66,7 @@ export const getNotes = asyncHandler(async (req: Request, res: Response) => {
 	return res
 		.status(200)
 		.json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<NoteDocument[]>(
 				true,
 				200,
 				"Notes are fetched successfully",
@@ -90,7 +91,7 @@ export const updateNote = asyncHandler(async (req: Request, res: Response) => {
 	return res
 		.status(200)
 		.json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<NoteDocument>(
 				true,
 				200,
 				"note updated successfully",
@@ -112,7 +113,7 @@ export const deleteNote = asyncHandler(async (req: Request, res: Response) => {
 	return res
 		.status(200)
 		.json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<NoteDocument>(
 				true,
 				200,
 				"Note deleted successfully",
@@ -136,7 +137,7 @@ export const archiveNote = asyncHandler(async (req: Request, res: Response) => {
 	return res
 		.status(200)
 		.json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<NoteDocument>(
 				true,
 				200,
 				"Note is archived successfully",
@@ -160,7 +161,7 @@ export const pinNote = asyncHandler(async (req: Request, res: Response) => {
 	return res
 		.status(200)
 		.json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<NoteDocument>(
 				true,
 				200,
 				"Note is pinned successfully",
