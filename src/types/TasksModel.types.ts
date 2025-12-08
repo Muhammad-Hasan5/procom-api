@@ -2,9 +2,9 @@ import { Document, Model, Types } from "mongoose";
 
 export interface ITask {
 	title: string;
-	description: string;
+	description?: string;
 	project: Types.ObjectId;
-	assignedTo: Types.ObjectId;
+	assignedTo?: Types.ObjectId;
 	status: "todo" | "in-progress" | "review" | "done";
 	createdBy: Types.ObjectId;
 }
