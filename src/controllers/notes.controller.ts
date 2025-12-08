@@ -55,7 +55,7 @@ export const getNotes = asyncHandler(async (req: Request, res: Response) => {
 		notes = await Note.find({ project: req.project?._id }).populate("user");
 	}
 
-	if (!notes) {
+	if (!notes.length) {
 		throw new ApiErrorResponse(
 			404,
 			"User either have no notes or there is problem while fetching",
@@ -102,7 +102,6 @@ export const updateNote = asyncHandler(async (req: Request, res: Response) => {
 export const deleteNote = asyncHandler(async (req: Request, res: Response) => {
 	const deletedNote = await Note.findOneAndDelete({
 		_id: req.note?._id,
-		user: req.user?._id,
 		project: req.project?._id,
 	});
 
