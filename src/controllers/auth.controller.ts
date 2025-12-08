@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import { RefreshTokenPayload } from "../types/TokensPayload.types.js";
 import { sendEmail } from "../utils/mail.js";
+import { UserDocument } from "../types/UserModel.types.js";
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
 	const { fullname, username, email, password } = await req.body;
@@ -64,7 +65,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
 	return res
 		.status(201)
 		.json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<UserDocument>(
 				true,
 				201,
 				"User created successfully",
@@ -107,7 +108,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 		.cookie("refreshToken", refreshToken, options)
 		.cookie("accessToken", accessToken, options)
 		.json(
-			new ApiSuccessResponse(true, 200, "User logged in", loggedInUser),
+			new ApiSuccessResponse<any>(true, 200, "User logged in", loggedInUser),
 		);
 });
 
@@ -134,7 +135,7 @@ export const logout = asyncHandler(async (req: Request, res: Response) => {
 		.clearCookie("accessToken", options)
 		.clearCookie("refreshToken", options)
 		.json(
-			new ApiSuccessResponse(true, 200, "User logged out successfully"),
+			new ApiSuccessResponse<null>(true, 200, "User logged out successfully", null),
 		);
 });
 
@@ -143,7 +144,7 @@ export const getCurrentUser = asyncHandler(
 		return res
 			.status(200)
 			.json(
-				new ApiSuccessResponse(
+				new ApiSuccessResponse<UserDocument>(
 					true,
 					200,
 					"user fetched successfully",
@@ -179,7 +180,7 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
 	await user.save({ validateBeforeSave: false });
 
 	return res.status(200).json(
-		new ApiSuccessResponse(true, 200, "Email verified", {
+		new ApiSuccessResponse<object>(true, 200, "Email verified", {
 			isEmailVerified: true,
 		}),
 	);
@@ -210,7 +211,7 @@ export const resendEmailVerificationMail = asyncHandler(
 
 		return res
 			.status(200)
-			.json(new ApiSuccessResponse(true, 200, "email send successfully"));
+			.json(new ApiSuccessResponse<null>(true, 200, "email send successfully", null));
 	},
 );
 
@@ -258,7 +259,7 @@ export const renewAccessToken = asyncHandler(
 			.cookie("accessToken", newAccessToken, options)
 			.cookie("refreshToken", newRefreshToken, options)
 			.json(
-				new ApiSuccessResponse(
+				new ApiSuccessResponse<object>(
 					true,
 					200,
 					"Access token renewed successfully",
@@ -301,10 +302,11 @@ export const forgotPasswordRequest = asyncHandler(
 		return res
 			.status(200)
 			.json(
-				new ApiSuccessResponse(
+				new ApiSuccessResponse<null>(
 					true,
 					200,
 					"forgot password request processed",
+					null
 				),
 			);
 	},
@@ -347,10 +349,11 @@ export const resetForgotPassword = asyncHandler(
 		return res
 			.status(200)
 			.json(
-				new ApiSuccessResponse(
+				new ApiSuccessResponse<null>(
 					true,
 					200,
 					"password reset successfully",
+					null
 				),
 			);
 	},
@@ -385,10 +388,11 @@ export const changeCurrentPassword = asyncHandler(
 		return res
 			.status(200)
 			.json(
-				new ApiSuccessResponse(
+				new ApiSuccessResponse<null>(
 					true,
 					200,
 					"password changed successfully",
+					null,
 				),
 			);
 	},
@@ -402,7 +406,7 @@ export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
 	return res
 		.status(200)
 		.json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<UserDocument>(
 				true,
 				200,
 				"User deleted successfully",

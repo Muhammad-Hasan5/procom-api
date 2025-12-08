@@ -84,7 +84,7 @@ export const logout = asyncHandler(async (req, res) => {
         .status(200)
         .clearCookie("accessToken", options)
         .clearCookie("refreshToken", options)
-        .json(new ApiSuccessResponse(true, 200, "User logged out successfully"));
+        .json(new ApiSuccessResponse(true, 200, "User logged out successfully", null));
 });
 export const getCurrentUser = asyncHandler(async (req, res) => {
     return res
@@ -135,7 +135,7 @@ export const resendEmailVerificationMail = asyncHandler(async (req, res) => {
     });
     return res
         .status(200)
-        .json(new ApiSuccessResponse(true, 200, "email send successfully"));
+        .json(new ApiSuccessResponse(true, 200, "email send successfully", null));
 });
 export const renewAccessToken = asyncHandler(async (req, res) => {
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
@@ -188,7 +188,7 @@ export const forgotPasswordRequest = asyncHandler(async (req, res) => {
     });
     return res
         .status(200)
-        .json(new ApiSuccessResponse(true, 200, "forgot password request processed"));
+        .json(new ApiSuccessResponse(true, 200, "forgot password request processed", null));
 });
 export const resetForgotPassword = asyncHandler(async (req, res) => {
     const { resetToken } = req.params;
@@ -216,7 +216,7 @@ export const resetForgotPassword = asyncHandler(async (req, res) => {
     });
     return res
         .status(200)
-        .json(new ApiSuccessResponse(true, 200, "password reset successfully"));
+        .json(new ApiSuccessResponse(true, 200, "password reset successfully", null));
 });
 export const changeCurrentPassword = asyncHandler(async (req, res) => {
     const { oldPassword, newPassword } = req.body;
@@ -238,7 +238,7 @@ export const changeCurrentPassword = asyncHandler(async (req, res) => {
     });
     return res
         .status(200)
-        .json(new ApiSuccessResponse(true, 200, "password changed successfully"));
+        .json(new ApiSuccessResponse(true, 200, "password changed successfully", null));
 });
 export const deleteUser = asyncHandler(async (req, res) => {
     const deletedUser = await User.findByIdAndDelete(req.user?._id);
