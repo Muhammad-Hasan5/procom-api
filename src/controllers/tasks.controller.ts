@@ -6,6 +6,7 @@ import { ApiSuccessResponse } from "../utils/api-success-response.js";
 import { Types } from "mongoose";
 import { User } from "../models/users.model.js";
 import { UserDocument } from "../types/UserModel.types.js";
+import { TaskDocument } from "../types/TasksModel.types.js";
 
 export const createTask = asyncHandler(async (req: Request, res: Response) => {
 	if (!req.user?._id || !Types.ObjectId.isValid(req.user._id)) {
@@ -73,7 +74,7 @@ export const createTask = asyncHandler(async (req: Request, res: Response) => {
 	}
 
 	res.status(201).json(
-		new ApiSuccessResponse(true, 201, "Task created successfully", task),
+		new ApiSuccessResponse<TaskDocument>(true, 201, "Task created successfully", task),
 	);
 });
 
@@ -103,7 +104,7 @@ export const getProjectTasks = asyncHandler(
 		}
 
 		res.status(200).json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<TaskDocument[]>(
 				true,
 				200,
 				"All project tasks fetched",
@@ -147,7 +148,7 @@ export const getUserTasks = asyncHandler(
 		}
 
 		res.status(200).json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<TaskDocument[]>(
 				true,
 				200,
 				"Users tasks in this project are fetched",
@@ -159,7 +160,7 @@ export const getUserTasks = asyncHandler(
 
 export const getTask = asyncHandler(async (req: Request, res: Response) => {
 	res.status(200).json(
-		new ApiSuccessResponse(true, 200, "task fetched", req.task?._id),
+		new ApiSuccessResponse<TaskDocument>(true, 200, "task fetched", req.task),
 	);
 });
 
@@ -236,7 +237,7 @@ export const updateTask = asyncHandler(async (req: Request, res: Response) => {
 	}
 
 	res.status(201).json(
-		new ApiSuccessResponse(
+		new ApiSuccessResponse<TaskDocument>(
 			true,
 			201,
 			"Task created successfully",
@@ -288,7 +289,7 @@ export const changeTaskStatus = asyncHandler(
 		}
 
 		res.status(200).json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<TaskDocument>(
 				true,
 				200,
 				"task's status change successfully",
@@ -329,7 +330,7 @@ export const deleteTask = asyncHandler(async (req: Request, res: Response) => {
 	}
 
 	res.status(200).json(
-		new ApiSuccessResponse(
+		new ApiSuccessResponse<TaskDocument>(
 			true,
 			200,
 			"task deleted successfully",
