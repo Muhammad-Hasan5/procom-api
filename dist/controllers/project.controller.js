@@ -24,22 +24,13 @@ export const createProject = asyncHandler(async (req, res) => {
         .json(new ApiSuccessResponse(true, 201, "Project created successfully", project));
 });
 export const getSingleProject = asyncHandler(async (req, res) => {
-    if (!req.user?._id || !Types.ObjectId.isValid(req.user._id)) {
+    if (!req.user || !Types.ObjectId.isValid(req.user._id)) {
         throw new ApiErrorResponse(400, "Invalid user ID");
     }
-    if (!req.project?._id || !Types.ObjectId.isValid(req.project._id)) {
+    if (!req.project || !Types.ObjectId.isValid(req.project._id)) {
         throw new ApiErrorResponse(400, "Invalid project ID");
     }
-    const userId = req.user?._id;
-    const projectId = req.project?._id;
-    const project = await Project.findOne({
-        _id: projectId,
-        owner: userId,
-    });
-    if (!project) {
-        throw new ApiErrorResponse(404, "Project not found");
-    }
-    res.status(200).json(new ApiSuccessResponse(true, 200, "Project found", project));
+    res.status(200).json(new ApiSuccessResponse(true, 200, "Project found", req.project));
 });
 export const getUserProjects = asyncHandler(async (req, res) => {
     if (!req.user?._id || !Types.ObjectId.isValid(req.user._id)) {
@@ -91,7 +82,9 @@ export const updateProject = asyncHandler(async (req, res) => {
         if (!users.length) {
             throw new ApiErrorResponse(404, "New members not found by provided emails");
         }
-        newMembers = users.map((u) => u._id);
+        const userIds = users.map(u => u._id);
+        const existingMembers = req.project?.members ?? [];
+        newMembers = [...new Set([...existingMembers, ...userIds])];
     }
     const updatedproject = await Project.findOneAndUpdate({ _id: projectId }, { title, description, owner: newOwner, members: newMembers }, {
         new: true,
