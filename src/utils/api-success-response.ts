@@ -1,14 +1,14 @@
-export class ApiSuccessResponse {
+export class ApiSuccessResponse<T> {
 	success: boolean;
 	statusCode: number;
 	message: string;
-	data?: any;
+	data?: T;
 
 	constructor(
 		success: boolean,
 		statusCode: number,
 		message: string,
-		data?: any,
+		data?: T,
 	) {
 		this.success = success;
 		this.statusCode = statusCode;
