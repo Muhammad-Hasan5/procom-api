@@ -19,7 +19,6 @@ export const taskSchema = new Schema<ITaskDocument>(
 		assignedTo: {
 			type: Types.ObjectId,
 			ref: "User",
-			required: true,
 		},
 		status: {
 			type: String,
