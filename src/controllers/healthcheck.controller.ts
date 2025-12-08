@@ -4,6 +4,6 @@ import { asyncHandler } from "../utils/async-handler.js";
 
 export const healthcheck = asyncHandler(async (req: Request, res: Response) => {
 	res.status(200).json(
-		new ApiSuccessResponse(true, 200, "Health Checking successfull", ""),
+		new ApiSuccessResponse<string>(true, 200, "Health Checking successfull", "no data for now"),
 	);
 });
