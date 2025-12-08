@@ -6,6 +6,7 @@ import { ApiSuccessResponse } from "../utils/api-success-response.js";
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/async-handler.js";
 import { Types } from "mongoose";
+import { ProjectDocument } from "../types/ProjectsModel.types.js";
 
 export const createProject = asyncHandler(
 	async (req: Request, res: Response) => {
@@ -29,7 +30,7 @@ export const createProject = asyncHandler(
 		return res
 			.status(201)
 			.json(
-				new ApiSuccessResponse(
+				new ApiSuccessResponse<ProjectDocument>(
 					true,
 					201,
 					"Project created successfully",
@@ -50,7 +51,7 @@ export const getSingleProject = asyncHandler(
 		}
 
 		res.status(200).json(
-			new ApiSuccessResponse(true, 200, "Project found", req.project),
+			new ApiSuccessResponse<ProjectDocument>(true, 200, "Project found", req.project),
 		);
 	},
 );
@@ -85,7 +86,7 @@ export const getUserProjects = asyncHandler(
 		}
 
 		res.status(200).json(
-			new ApiSuccessResponse(true, 200, "Project found", projects),
+			new ApiSuccessResponse<ProjectDocument[]>(true, 200, "Project found", projects),
 		);
 	},
 );
@@ -151,7 +152,7 @@ export const updateProject = asyncHandler(
 		}
 
 		res.status(200).json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<ProjectDocument>(
 				true,
 				200,
 				"Project updated successfully",
@@ -203,7 +204,7 @@ export const deleteProject = asyncHandler(
 		}
 
 		res.status(200).json(
-			new ApiSuccessResponse(true, 200, "Project deleted successfully", {
+			new ApiSuccessResponse<object>(true, 200, "Project deleted successfully", {
 				deletedProject,
 				deletedProjectNotes,
 			}),
@@ -253,7 +254,7 @@ export const addMemberToProject = asyncHandler(
 		await project.populate([{ path: "owner" }, { path: "members" }]);
 
 		res.status(200).json(
-			new ApiSuccessResponse(
+			new ApiSuccessResponse<ProjectDocument>(
 				true,
 				200,
 				"Member added to project successfully",
