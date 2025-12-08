@@ -157,6 +157,12 @@ export const getUserTasks = asyncHandler(
 	},
 );
 
+export const getTask = asyncHandler(async (req: Request, res: Response) => {
+	res.status(200).json(
+		new ApiSuccessResponse(true, 200, "task fetched", req.task?._id),
+	);
+});
+
 export const updateTask = asyncHandler(async (req: Request, res: Response) => {
 	if (!req.user?._id || !Types.ObjectId.isValid(req.user._id)) {
 		throw new ApiErrorResponse(400, "Invalid user ID");
