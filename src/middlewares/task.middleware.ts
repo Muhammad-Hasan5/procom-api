@@ -7,7 +7,7 @@ import { Types } from "mongoose";
 export const canAccessTask = asyncHandler(
 	async (req: Request, res: Response, next: NextFunction) => {
 		if (!Types.ObjectId.isValid(req.params.taskId)) {
-			throw new ApiErrorResponse(404, "invalid project ID");
+			throw new ApiErrorResponse(404, "invalid task ID");
 		}
 
 		const task = await Task.findById(req.params.taskId);
